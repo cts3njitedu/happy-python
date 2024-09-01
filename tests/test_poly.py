@@ -27,11 +27,22 @@ class MyTestCase(unittest.TestCase):
         poly = Poly()
         self.assertEqual(expected, poly.poly_top(r, c, free_poly))  #
 
-    def test_enumerate_poly(self):
+    @parameterized.expand([
+        (0, 1),
+        (1, 1),
+        (2, 1),
+        (3, 2),
+        (4, 5),
+        (5, 12),
+        (6, 35),
+        (7, 108),
+        (8, 369),
+        (9, 1285),
+        (10, 4655),
+    ])
+    def test_enumerate_poly(self, n, expected):
         poly = Poly()
-        p = poly.enumerate_poly(13)
-        print(len(p))
-        # print(p)
+        self.assertEqual(expected, len(poly.enumerate_poly(n)))
 
 if __name__ == '__main__':
     unittest.main()
