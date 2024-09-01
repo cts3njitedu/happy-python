@@ -4,7 +4,6 @@ import pytest
 from parameterized import parameterized
 
 class MyTestCase(unittest.TestCase):
-
     @parameterized.expand([
         (2, 1, [2,3,2], [2,3,3]),
         (0, 0, [1,1,1], [3,2,2]),
@@ -43,6 +42,15 @@ class MyTestCase(unittest.TestCase):
     def test_enumerate_poly(self, n, expected):
         poly = Poly()
         self.assertEqual(expected, len(poly.enumerate_poly(n)))
+
+    def test_enumerate_poly_individual(self):
+        poly = Poly()
+        print("Length is: ")
+        print(len(poly.enumerate_poly(10)))
+
+    def test_transformation_v2(self):
+        poly = Poly()
+        print(poly.transformations_v2([6, 5, 3]))
 
 if __name__ == '__main__':
     unittest.main()
