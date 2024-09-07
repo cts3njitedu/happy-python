@@ -63,11 +63,11 @@ class MyTestCase(unittest.TestCase):
 
     def test_enumerate_poly_individual(self):
         poly = Poly()
-        print("Length is:", len(poly.enumerate_poly(17)))
+        print("Length is:", len(poly.enumerate_poly(10)))
 
     def test_transformation_v2(self):
         poly = Poly()
-        print(poly.transformations_v2([6, 5, 3]))
+        print(poly.transformations_v2([13, 15, 3]))
 
     bin_length_v2_test_data= [(x, 1) for x in range(1, 2)] + [(x, 2) for x in range(2, 4)] + [(x, 3) for x in range(4, 8)] + [(x, 4) for x in range(8, 16)] + [(x, 5) for x in range(16, 32)];
     @parameterized.expand(bin_length_v2_test_data)

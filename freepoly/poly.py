@@ -16,7 +16,7 @@ class Poly:
         if n == 1:
             return [[n]]
         free_poly_queue = deque()
-        root = np.ones(1, dtype=np.uint64)
+        root = np.ones(1, dtype=np.uint32)
         free_poly_queue.append(root)
         free_poly_set = {str([1])}
         for i in range(2, n + 1):
@@ -47,7 +47,7 @@ class Poly:
         if top:
             poly_copy = poly.copy()
             if r == 0:
-                return np.concatenate((np.array([1<<c]), poly_copy))
+                return np.concatenate((np.array([1<<c], dtype=np.uint32), poly_copy))
             poly_copy[r - 1] |= 1<<c
             return poly_copy
 
@@ -69,7 +69,7 @@ class Poly:
         if bottom:
             poly_copy = poly.copy()
             if r == len(poly_copy) - 1:
-                return np.concatenate((poly_copy, np.array([1<<c])))
+                return np.concatenate((poly_copy, np.array([1<<c], dtype=np.uint32)))
             poly_copy[r + 1] |= 1<<c
             return poly_copy
 
@@ -91,14 +91,14 @@ class Poly:
     def transformations_v2(self, poly):
         cs = max([self.bin_length_v2(x) for x in poly])
         rs = len(poly)
-        top_right_left = np.zeros(rs, np.uint64)
-        top_left_right = np.zeros(rs, np.uint64)
-        right_top_bottom = np.zeros(cs, np.uint64)
-        right_bottom_top = np.zeros(cs, np.uint64)
-        bottom_left_right = np.zeros(rs, np.uint64)
-        bottom_right_left = np.zeros(rs, np.uint64)
-        left_top_bottom = np.zeros(cs, np.uint64)
-        left_bottom_top = np.zeros(cs, np.uint64)
+        top_right_left = np.zeros(rs, np.uint32)
+        top_left_right = np.zeros(rs, np.uint32)
+        right_top_bottom = np.zeros(cs, np.uint32)
+        right_bottom_top = np.zeros(cs, np.uint32)
+        bottom_left_right = np.zeros(rs, np.uint32)
+        bottom_right_left = np.zeros(rs, np.uint32)
+        left_top_bottom = np.zeros(cs, np.uint32)
+        left_bottom_top = np.zeros(cs, np.uint32)
         for r, rv in enumerate(poly):
             for c in range(0, cs):
                 v = 0 if rv & (1 << c) == 0 else 1
