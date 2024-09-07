@@ -1,10 +1,15 @@
 from collections import deque
-
+from math import log2, floor
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 
 class Poly:
 
     def bin_length(self, n):
         return len(bin(n)[2:])
+
+    def bin_length_v2(self, n):
+        return floor(log2(n)/log2(2)) + 1
 
     def enumerate_poly(self, n):
         if n == 0:
@@ -19,7 +24,7 @@ class Poly:
             while size > 0:
                 poly = free_poly_queue.popleft()
                 for r, rv in enumerate(poly):
-                    column_size = self.bin_length(rv)
+                    column_size = self.bin_length_v2(rv)
                     for c in range(column_size):
                         if rv & 1 << c != 0:
                             self.save_poly(free_poly_set, free_poly_queue, self.poly_top(r, c, poly))
@@ -69,14 +74,11 @@ class Poly:
             return False
         transformations = self.transformations_v2(free_poly)
         for t in transformations:
-            if str(t) in free_poly_set:
-                return False
-        for t in transformations:
             free_poly_set.add(str(t))
         return True
 
     def transformations_v2(self, poly):
-        cs = max(map(self.bin_length, poly))
+        cs = max([self.bin_length_v2(x) for x in poly])
         rs = len(poly)
         top_right_left = [0]*rs
         top_left_right = [0]*rs
@@ -109,7 +111,7 @@ class Poly:
         bottom_right_left = []
         left_top_bottom = []
         left_bottom_top = []
-        cs = max(map(self.bin_length, poly))
+        cs = max([self.bin_length(x) for x in poly])
         rs = len(poly)
         for r, rv in enumerate(poly):
             for c in range(0, cs):
