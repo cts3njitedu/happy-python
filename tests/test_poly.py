@@ -1,9 +1,9 @@
 import unittest
-from unittest import skipIf
+
+from parameterized import parameterized
 
 from freepoly.poly import Poly
-import numpy as np
-from parameterized import parameterized
+
 
 class MyTestCase(unittest.TestCase):
 
@@ -15,7 +15,7 @@ class MyTestCase(unittest.TestCase):
     ])
     def test_poly_right(self, r, c, free_poly, expected):
         poly = Poly()
-        np.testing.assert_array_equal(expected, poly.poly_right(r, c, free_poly))
+        self.assertEqual(expected, poly.poly_right(r, c, free_poly))
 
     @parameterized.expand([
         (0, 0, [3, 2], [3, 3]),
@@ -23,7 +23,7 @@ class MyTestCase(unittest.TestCase):
     ])
     def test_poly_bottom(self, r, c, free_poly, expected):
         poly = Poly()
-        np.testing.assert_array_equal(expected, poly.poly_bottom(r, c, free_poly))
+        self.assertEqual(expected, poly.poly_bottom(r, c, free_poly))
 
     @parameterized.expand([
         (0, 2, [4, 7, 1], [12, 7, 1]),
@@ -32,7 +32,7 @@ class MyTestCase(unittest.TestCase):
     ])
     def test_poly_left(self, r, c, free_poly, expected):
         poly = Poly()
-        np.testing.assert_array_equal(expected, poly.poly_left(r, c, free_poly))
+        self.assertEqual(expected, poly.poly_left(r, c, free_poly))
 
     @parameterized.expand([
         (1, 1, [1, 3], [3, 3]),
@@ -42,7 +42,7 @@ class MyTestCase(unittest.TestCase):
     ])
     def test_poly_top(self, r, c, free_poly, expected):
         poly = Poly()
-        np.testing.assert_array_equal(np.array(expected, dtype=np.uint64), poly.poly_top(r, c, free_poly))  #
+        self.assertEqual(expected, poly.poly_top(r, c, free_poly))  #
 
     @parameterized.expand([
         (0, 1),

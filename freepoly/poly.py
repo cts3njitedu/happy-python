@@ -1,6 +1,5 @@
 from collections import deque
 from math import log2, floor
-import numpy as np
 
 class Poly:
 
@@ -16,9 +15,9 @@ class Poly:
         if n == 1:
             return [[n]]
         free_poly_queue = deque()
-        root = np.ones(1, dtype=np.uint32)
+        root = [1]
         free_poly_queue.append(root)
-        free_poly_set = {str([1])}
+        free_poly_set = {str(root)}
         for i in range(2, n + 1):
             size = len(free_poly_queue)
             while size > 0:
@@ -47,29 +46,29 @@ class Poly:
         if top:
             poly_copy = poly.copy()
             if r == 0:
-                return np.concatenate((np.array([1<<c], dtype=np.uint32), poly_copy))
+                return [1<<c] + poly_copy
             poly_copy[r - 1] |= 1<<c
             return poly_copy
 
     def poly_right(self, r, c, poly):
         right = c == 0 or (poly[r] & 1 << (c - 1) == 0)
         if right:
-            poly_copy = poly.copy()
             if c == 0:
                 fn = lambda row : row << 1
-                vfn = np.vectorize(fn)
-                poly_copy = vfn(poly_copy)
+                poly_copy = list(map(fn, poly))
                 poly_copy[r] |= 1
+                return poly_copy
             else:
+                poly_copy = poly.copy()
                 poly_copy[r] |= 1<<(c-1)
-            return poly_copy
+                return poly_copy
 
     def poly_bottom(self, r, c, poly):
         bottom = r == len(poly) - 1 or (poly[r + 1] & 1 << c == 0)
         if bottom:
             poly_copy = poly.copy()
             if r == len(poly_copy) - 1:
-                return np.concatenate((poly_copy, np.array([1<<c], dtype=np.uint32)))
+                return poly_copy + [1<<c]
             poly_copy[r + 1] |= 1<<c
             return poly_copy
 
@@ -91,14 +90,14 @@ class Poly:
     def transformations_v2(self, poly):
         cs = max([self.bin_length_v2(x) for x in poly])
         rs = len(poly)
-        top_right_left = np.zeros(rs, np.uint32)
-        top_left_right = np.zeros(rs, np.uint32)
-        right_top_bottom = np.zeros(cs, np.uint32)
-        right_bottom_top = np.zeros(cs, np.uint32)
-        bottom_left_right = np.zeros(rs, np.uint32)
-        bottom_right_left = np.zeros(rs, np.uint32)
-        left_top_bottom = np.zeros(cs, np.uint32)
-        left_bottom_top = np.zeros(cs, np.uint32)
+        top_right_left = [0] * rs
+        top_left_right = [0] * rs
+        right_top_bottom = [0] * cs
+        right_bottom_top = [0] * cs
+        bottom_left_right = [0] * rs
+        bottom_right_left = [0] * rs
+        left_top_bottom = [0] * cs
+        left_bottom_top = [0] * cs
         for r, rv in enumerate(poly):
             for c in range(0, cs):
                 v = 0 if rv & (1 << c) == 0 else 1
