@@ -82,12 +82,12 @@ class Poly:
     def is_unique_poly(self, free_poly_set, free_poly):
         if str(free_poly) in free_poly_set:
             return False
-        transformations = self.transformations_v2(free_poly)
+        transformations = self.transformations(free_poly)
         for t in transformations:
             free_poly_set.add(str(t))
         return True
 
-    def transformations_v2(self, poly):
+    def transformations(self, poly):
         cs = max([self.bin_length_v2(x) for x in poly])
         rs = len(poly)
         top_right_left = [0] * rs
@@ -111,42 +111,3 @@ class Poly:
                 left_bottom_top[cs - c - 1] |= (v << (rs - r - 1))
         return [top_right_left, top_left_right, right_top_bottom, right_bottom_top, bottom_right_left,
          bottom_left_right, left_top_bottom, left_bottom_top]
-
-    def transformations(self, poly):
-        top_right_left = []
-        top_left_right = []
-        right_top_bottom = []
-        right_bottom_top = []
-        bottom_left_right = []
-        bottom_right_left = []
-        left_top_bottom = []
-        left_bottom_top = []
-        cs = max([self.bin_length(x) for x in poly])
-        rs = len(poly)
-        for r, rv in enumerate(poly):
-            for c in range(0, cs):
-                v = 0 if rv & (1 << c) == 0 else 1
-                if c == 0:
-                    top_right_left += [v << c]
-                    top_left_right += [v << (cs - c - 1)]
-                    bottom_right_left = [v << c] + bottom_right_left
-                    bottom_left_right = [v << (cs - c - 1)] + bottom_left_right
-                else:
-                    top_right_left[r] |= (v << c)
-                    top_left_right[r] |= (v << (cs - c - 1))
-                    bottom_right_left[0] |= (v << c)
-                    bottom_left_right[0] |= (v << (cs - c - 1))
-
-                if r == 0:
-                    right_top_bottom += [v << r]
-                    right_bottom_top += [v << (rs - r - 1)]
-                    left_top_bottom = [v << r] + left_top_bottom
-                    left_bottom_top = [v << (rs - r - 1)] + left_bottom_top
-                else:
-                    right_top_bottom[c] |= (v << r)
-                    right_bottom_top[c] |= (v << (rs - r - 1))
-                    left_top_bottom[cs - c - 1] |= (v << r)
-                    left_bottom_top[cs - c - 1] |= (v << (rs - r - 1))
-
-        return [top_right_left, top_left_right, right_top_bottom, right_bottom_top, bottom_right_left,
-                bottom_left_right, left_top_bottom, left_bottom_top]
